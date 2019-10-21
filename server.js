@@ -15,5 +15,18 @@ db.sequelize.sync().then(() => {
 app.use(body_Parser.urlencoded({ extended: true }));
 app.use(body_Parser.json());
 
-const routes = require("./app/routes/approutes.js");
+const routes = require("./app/routes/voters.js");
 routes(app);
+
+app.use(function (req, res, next) {
+  next();
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+
+  res.send(err.status || 500, err);
+  // render the error page
+  // res.render('error');
+});

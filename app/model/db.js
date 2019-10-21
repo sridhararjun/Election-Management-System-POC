@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
-const sequelize = new Sequelize('parliament_election', 'root', '', {
+const sequelize = new Sequelize('parliament_election', 'root', 'root', {
   host: 'localhost',
   dialect: 'mysql',
 });

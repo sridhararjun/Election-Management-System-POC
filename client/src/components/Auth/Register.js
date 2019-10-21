@@ -14,7 +14,7 @@ class Register extends Component {
       message: ""
     };
     this.onChange = this.onChange.bind(this);
-    // this.onSubmit = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -61,16 +61,16 @@ class Register extends Component {
         if (response.status >= 400) {
           throw new Error("Bad Response From Server");
         }
-        if ((response.status = 200)) {
+        if (response.status === 200) {
           this.setState({
             message:
               "Thanks for Registering!!! Kindly revisit in sometime to check your status"
           });
         }
-      })
+      }.bind(this))
       .then(function(data) {
         console.log(data + "Data Success");
-        if (data == "success") {
+        if (data === "success") {
           this.setState({
             message:
               "Thanks for Registering!!! Kindly revisit in sometime to check your status"

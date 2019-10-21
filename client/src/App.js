@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Layout/Navbar.js";
@@ -18,10 +18,10 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Navbar />
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
+          <Navbar/>
+          <Route exact path="/" component={Landing}/>
+          <Route exact path="/register" component={Register}/>
+          <Route exact path="/login" component={Login}/>
         </div>
       </Router>
     );

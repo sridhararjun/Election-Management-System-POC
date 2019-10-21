@@ -1,0 +1,50 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe D:\Users\smuraleedhar\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\PuTTY\;C:\Program Files\Java\jdk-13\bin\;;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\nodejs\;D:\Users\smuraleedhar\AppData\Local\Microsoft\WindowsApps;D:\Users\smuraleedhar\AppData\Local\atom\bin;D:\Users\smuraleedhar\AppData\Roaming\npm
+
+Yarn version: 
+  1.19.1
+
+Node version: 
+  10.16.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: read ECONNRESET
+      at TLSWrap.onStreamRead (internal/stream_base_commons.js:111:27)
+
+npm manifest: 
+  {
+    "name": "Server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "client": "cd client && npm start",
+      "server": "nodemon server.js",
+      "start": "concurrently --kill-others-on-fail \"nodemon server.js\" \"cd client\" \"npm start\"",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "body-parser": "^1.19.0",
+      "express": "^4.17.1",
+      "mysql": "^2.17.1"
+    },
+    "devDependencies": {
+      "concurrently": "^5.0.0",
+      "nodemon": "^1.19.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -1,11 +1,12 @@
-const { createNewUser, listAllUsers } = require("../handler/voters");
-const { validateSchema } = require("../utils");
-const { addNewUserRequest, getUserListRequest } = require("../schema/voters");
+const { createNewUser, listAllUsers, voterLogin } = require("../handler/voters");
+const { validateSchema, validateToken } = require("../utils");
+const { addNewUserRequest, getUserListRequest, loginVoter } = require("../schema/voters");
 
 // async await
 const addNewUser = async (req, res, next) => {
-  const { body } = req;
+  const { body, headers: { authorization } } = req;
   try {
+    await validateToken(authorization);
     await validateSchema(req, addNewUserRequest);
     await createNewUser(body);
     res.send({ message: "voter added successfully" });
@@ -36,11 +37,25 @@ const listUsers = async (req, res, next) => {
 };
 
 //Approve Voters
-const approveOrRejectVoters = async function(req, res, next) {
+const approveOrRejectVoters = async function (req, res, next) {
   const { body } = req;
 };
 
+
+// login
+const login = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await validateSchema(body, loginVoter);
+    const resp = await voterLogin(body);
+    res.send(200, resp);
+    next();
+  } catch (e) {
+    return next({ status: 500, e })
+  }
+};
 // exporting functions
 
 module.exports.addNewUser = addNewUser;
 module.exports.listUsers = listUsers;
+module.exports.login = login;

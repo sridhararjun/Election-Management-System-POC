@@ -1,31 +1,79 @@
 const joi = require("joi");
+const jwt = require('jsonwebtoken');
 
-module.exports.validateSchema = (req, schema) => {
+// import internal files
+const { jwt_secret } = require('../config');
+const { voters } = require('../model/db');
+
+module.exports.validateSchema = (req, schema) => new Promise((resolve, reject) => {
   const { body: reqBody, query } = req;
-  console.log(req, " ", __filename);
   if (reqBody) {
-    console.log(__filename);
-    return new Promise((resolve, reject) => {
-      joi.validate(reqBody, schema, (err, res) => {
-        if (err) {
-          console.log("Validate Schema Failed -", err);
-          return reject(err);
-        } else {
-          console.log("passed");
-          return resolve(res);
-        }
-      });
+    joi.validate(reqBody, schema, (err, res) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(res);
+      }
     });
   }
   if (query) {
-    return new Promise((resolve, reject) => {
-      joi.validate(query, schema, (err, res) => {
-        if (err) {
-          return reject(err);
-        } else {
-          return resolve(res);
-        }
-      });
+    joi.validate(query, schema, (err, res) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(res);
+      }
     });
   }
+});
+
+module.exports.validateToken = token => new Promise((resolve, reject) => {
+  if (token) {
+    let user_id = null;
+    jwt.verify(token, jwt_secret.key, (err, authData) => {
+      if (err) {
+        return reject({
+          status: 403,
+          message: 'Forbidden'
+        })
+      }
+      user_id = authData.sub;
+    });
+    return voters.findOne({
+      where: {
+        id: user_id,
+        active: true
+      }
+    })
+      .then((user) => {
+        if (user) {
+          return resolve(user.id);
+        }
+        return reject({
+          status: 403,
+          message: 'Forbidden'
+        })
+      })
+  }
+  return reject({
+    status: 403,
+    message: 'Forbidden'
+  })
+});
+
+// async await
+
+module.exports.generateToken = async userId => {
+  const jwtTokenObj = {
+    sub: userId,
+  };
+  /*  { expiresIn: '86400s' } */
+  jwt.sign(jwtTokenObj, jwt_secret.key, { expiresIn: '86400s' }, (err, token) => {
+    if (err) {
+      throw err;
+    }
+    return resolve({
+      authToken: token,
+    })
+  })
 };

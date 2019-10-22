@@ -28,5 +28,15 @@ const getAllUsers = async options => {
   return voters.findAndCountAll(queryOptions);
 };
 
+const findUser = async id => {
+  return voters.findOne({
+    where: {
+      id,
+    },
+    attributes: ['password']
+  })
+};
+
 module.exports.addNewUser = addNewUser;
 module.exports.getAllUsers = getAllUsers;
+module.exports.findUser = findUser;

@@ -22,3 +22,8 @@ module.exports.getUserListRequest = {
   constituency_id: joi.number(),
   voting_status: joi.boolean().default(false)
 };
+
+module.exports.loginVoter = {
+  voterId: joi.string().required(),
+  password: joi.string().required()
+};

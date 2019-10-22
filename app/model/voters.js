@@ -1,62 +1,84 @@
-module.exports = ((sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
-    'voters',
+    "voters",
     {
       id: {
-        field: 'id',
+        field: "id",
         type: DataTypes.INTEGER(11),
         allowNull: false,
         primaryKey: true,
-        autoIncrement: false,
+        autoIncrement: false
       },
       name: {
-        field: 'name',
+        field: "name",
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: false
       },
       roles: {
-        field: 'roles',
+        field: "roles",
         type: DataTypes.INTEGER(11),
         references: {
-          model: 'role',
-          key: 'id'
+          model: "role",
+          key: "id"
         },
-        onUpdate: 'NO ACTION',
-        onDelete: 'NO ACTION',
+        onUpdate: "NO ACTION",
+        onDelete: "NO ACTION"
       },
       constituency_id: {
-        field: 'constituency_id',
+        field: "constituency_id",
         type: DataTypes.INTEGER(11),
         references: {
-          model: 'constituency',
-          key: 'id'
+          model: "constituency",
+          key: "id"
         },
         allowNull: false,
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       voting_status: {
-        field: 'voting_status',
+        field: "voting_status",
         type: DataTypes.TINYINT(1),
-        default: false,
+        default: false
       },
       address: {
-        field: 'address',
+        field: "address",
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: false
+      },
+      approval_status: {
+        field: "approval_status",
+        type: DataTypes.TINYINT(1),
+        default: false
+      },
+      password: {
+        field: "password",
+        type: DataTypes.STRING(25),
+        allowNull: false
+      },
+      party_id: {
+        field: "party_id",
+        type: DataTypes.INTEGER(11),
+        allowNull: true,
+        default: null,
+        references: {
+          model: "party",
+          key: "id"
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
       }
     },
     {
-      tableName: 'voters',
+      tableName: "voters",
       freezeTableName: true,
       underscored: true,
       timestamps: true,
       paranoid: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-      deletedAt: 'deleted_at',
-      engine: 'InnoDB',
-      charset: 'utf8',
-    },
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      deletedAt: "deleted_at",
+      engine: "InnoDB",
+      charset: "utf8"
+    }
   );
-});
+};

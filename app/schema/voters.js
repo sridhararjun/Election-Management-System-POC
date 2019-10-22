@@ -27,3 +27,7 @@ module.exports.loginVoter = {
   voterId: joi.string().required(),
   password: joi.string().required()
 };
+
+module.exports.approveVoterRequest = {
+  id: joi.number()
+};

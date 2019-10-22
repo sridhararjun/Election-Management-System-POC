@@ -22,3 +22,7 @@ module.exports.getUserListRequest = {
   constituency_id: joi.number(),
   voting_status: joi.boolean().default(false)
 };
+
+module.exports.approveVoterRequest = {
+  id: joi.number()
+};

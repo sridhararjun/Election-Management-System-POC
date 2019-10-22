@@ -1,13 +1,17 @@
 "use strict";
 
-const { addNewUser, getAllUsers } = require("../datastore/voters.js");
+const {
+  addNewUser,
+  getAllUsers,
+  updateVoter
+} = require("../datastore/voters.js");
 
 exports.createNewUser = async req => {
   try {
     req.voting_status = false;
-    await addNewUser(req)
+    await addNewUser(req);
   } catch (e) {
-    throw e
+    throw e;
   }
 };
 
@@ -17,11 +21,21 @@ exports.listAllUsers = async req => {
     const voters = await getAllUsers(query);
     return voters;
   } catch (e) {
-    console.log(e)
+    console.log(e);
     throw e;
   }
 };
 
-exports.list_All_Roles = async function (req, res) {
-
+exports.updateVoterApprovalStatus = async function(req) {
+  try {
+    console.log(__filename);
+    const voters = await updateVoter(req);
+    console.log(voters, "--voters");
+    return voters;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 };
+
+exports.list_All_Roles = async function(req, res) {};

@@ -1,6 +1,14 @@
-const { createNewUser, listAllUsers } = require("../handler/voters");
+const {
+  createNewUser,
+  listAllUsers,
+  updateVoterApprovalStatus
+} = require("../handler/voters");
 const { validateSchema } = require("../utils");
-const { addNewUserRequest, getUserListRequest } = require("../schema/voters");
+const {
+  addNewUserRequest,
+  getUserListRequest,
+  approveVoterRequest
+} = require("../schema/voters");
 
 // async await
 const addNewUser = async (req, res, next) => {
@@ -37,10 +45,25 @@ const listUsers = async (req, res, next) => {
 
 //Approve Voters
 const approveOrRejectVoters = async function(req, res, next) {
-  const { body } = req;
+  console.log(__filename);
+  // const { reqBody: params, body } = req;
+  const reqBody = {
+    params: req.params,
+    body: req.body
+  };
+  console.log(reqBody);
+  try {
+    // await validateSchema(params, approveVoterRequest);
+    // await validateSchema(params, approveVoterRequest);
+    const voterDetail = await updateVoterApprovalStatus(reqBody);
+    res.send({ message: "Voter updated successfully!!!" });
+  } catch (e) {
+    return next({ status: 400, e });
+  }
 };
 
 // exporting functions
 
 module.exports.addNewUser = addNewUser;
 module.exports.listUsers = listUsers;
+module.exports.approveOrRejectVoters = approveOrRejectVoters;

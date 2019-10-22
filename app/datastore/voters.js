@@ -1,6 +1,5 @@
-const { voters } = require('../model/db');
-const { getRegexQuery } = require('../utils');
-
+const { voters } = require("../model/db");
+const { getRegexQuery } = require("../utils");
 
 const addNewUser = async reqBody => {
   return voters.create(reqBody);
@@ -14,7 +13,7 @@ const getAllUsers = async options => {
   if (filter_by) {
     queryOptions.where = {
       id: {
-        $like: getRegexQuery(filter_by),
+        $like: getRegexQuery(filter_by)
       }
     };
     // queryOptions.where.id.$like = `%${filter_by}%`;
@@ -28,5 +27,16 @@ const getAllUsers = async options => {
   return voters.findAndCountAll(queryOptions);
 };
 
+const updateVoter = async (reqBody, response) => {
+  // console.log(__filename);
+  return voters.update(
+    { approval_status: reqBody.body.approval_status },
+    { returning: true, where: { id: reqBody.params.id } }
+  );
+  // .then(function(result) {
+  //   console.log(result, "-----------------");
+  // });
+};
 module.exports.addNewUser = addNewUser;
 module.exports.getAllUsers = getAllUsers;
+module.exports.updateVoter = updateVoter;

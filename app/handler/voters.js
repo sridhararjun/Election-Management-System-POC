@@ -1,17 +1,10 @@
 "use strict";
 
-const {
-  addNewUser,
-  getAllUsers,
-  updateVoter,
-  findUser
-} = require("../datastore/voters.js");
-
 const boom = require('boom');
 const bcrypt = require('bcrypt');
 
 const { generateToken } = require('../utils');
-const { addNewUser, getAllUsers, findUser } = require("../datastore/voters.js");
+const { addNewUser, getAllUsers, findUser, updateVoter } = require("../datastore/voters.js");
 
 const validatePassword = (reqPassword, userPassword) => {
   return bcrypt.compare(reqPassword, userPassword).then((res) => {

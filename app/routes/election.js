@@ -9,4 +9,9 @@ module.exports = function(app) {
 
   app.route("/party").post(election.registerPartyAndSymbols);
   app.route("/party").get(election.getPartyList);
+
+  app.route("/candidate").post(election.registerCandidates);
+
+  app.route("/election").post(election.registerVotes);
+  app.route("/election").get(election.getElectionResult);
 };

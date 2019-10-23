@@ -4,7 +4,10 @@ const {
   getAllMPOfStates,
   updateMPSeatsofStates,
   addNewParty,
-  getAllParties
+  getAllParties,
+  addNewCandidate,
+  addNewVotes,
+  getElectionResult
 } = require("../datastore/election.js");
 
 exports.getAllMPs = async function(req) {
@@ -45,6 +48,37 @@ exports.getAllPartiesList = async function(req) {
     console.log(__filename);
     const partyDetails = getAllParties();
     return partyDetails;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+exports.registerElectionCandidate = async function(req) {
+  try {
+    console.log(__filename);
+    console.log(req);
+    await addNewCandidate(req);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+exports.resgiterVotesOnElection = async function(req) {
+  try {
+    await addNewVotes(req);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+exports.listRegisteredVotes = async function(req) {
+  try {
+    console.log(__filename);
+    const electionResult = getElectionResult();
+    return electionResult;
   } catch (e) {
     console.log(e);
     throw e;

@@ -17,3 +17,10 @@ module.exports.registerPartyRequest = {
   party_name: joi.string().required,
   symbol_id: joi.number().required
 };
+
+module.exports.registerCandidateRequest = {
+  id: joi.number().required,
+  voter_id: joi.number().required,
+  party_id: joi.number().required,
+  state_id: joi.number().required
+};

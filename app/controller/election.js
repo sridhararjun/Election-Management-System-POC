@@ -4,13 +4,17 @@ const {
   getAllMPs,
   updateStateMPSeatsDetails,
   createNewPartyAndSymbol,
-  getAllPartiesList
+  getAllPartiesList,
+  registerElectionCandidate,
+  resgiterVotesOnElection,
+  listRegisteredVotes
 } = require("../handler/election.js");
 const { validateSchema } = require("../utils");
 const {
   getStateMPRequest,
   updateMPSeatsCountRequest,
-  registerPartyRequest
+  registerPartyRequest,
+  registerCandidateRequest
 } = require("../schema/election.js");
 
 //promise based
@@ -41,7 +45,7 @@ const updateMPSeats = async function(req, res, next) {
   const { body } = req;
   console.log(body, " Request Body");
   try {
-    await validateSchema(body, updateMPSeatsCountRequest);
+    // await validateSchema(body, updateMPSeatsCountRequest);
     await updateStateMPSeatsDetails(body);
     res.send({ message: "MP Seats updated successfully!!!!" });
     next();
@@ -81,7 +85,47 @@ const getPartyList = async function(req, res, next) {
   //   console.log(parties, "Parties Response");
   res.send(parties);
 };
+
+const registerCandidates = async function(req, res, next) {
+  const { body } = req;
+  console.log(__filename);
+  console.log(body);
+  try {
+    // await validateSchema(body, registerCandidateRequest);
+    await registerElectionCandidate(body);
+    res.send({ message: "Candidate Registered Successfully!!!" });
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+const registerVotes = async function(req, res, next) {
+  const { body } = req;
+  console.log(__filename);
+  console.log(body);
+  try {
+    await resgiterVotesOnElection(body);
+    res.send({ message: "Votes Added" });
+  } catch (e) {
+    console.log(e);
+    res.send(e);
+  }
+};
+
+const getElectionResult = async function(req, res, next) {
+  try {
+    const result = await listRegisteredVotes();
+    res.send(result);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
 module.exports.getAllMPsofStates = getAllMPsofStates;
 module.exports.updateMPSeats = updateMPSeats;
 module.exports.registerPartyAndSymbols = registerPartyAndSymbols;
 module.exports.getPartyList = getPartyList;
+module.exports.registerCandidates = registerCandidates;
+module.exports.registerVotes = registerVotes;
+module.exports.getElectionResult = getElectionResult;

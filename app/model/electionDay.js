@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
-    "candidates",
+    "electionDay",
     {
       id: {
         field: "id",
@@ -9,42 +9,25 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      voter_id: {
-        field: "voter_id",
+      candidate_id: {
+        field: "candidate_id",
         type: DataTypes.INTEGER(11),
         allowNull: false,
         references: {
-          model: "voters",
+          model: "candidates",
           key: "id"
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
       },
-      party_id: {
-        field: "party_id",
+      votes_registered: {
+        field: "votes_registered",
         type: DataTypes.INTEGER(11),
-        allowNull: false,
-        references: {
-          model: "party",
-          key: "id"
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-      },
-      state_id: {
-        field: "state_id",
-        type: DataTypes.INTEGER(11),
-        allowNull: false,
-        references: {
-          model: "states",
-          key: "id"
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        allowNull: true
       }
     },
     {
-      tableName: "candidates",
+      tableName: "electionDay",
       freezeTableName: true,
       underscored: true,
       timestamps: true,

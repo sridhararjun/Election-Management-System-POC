@@ -1,12 +1,26 @@
-const { createNewUser, listAllUsers,updateVoterApprovalStatus, voterLogin } = require("../handler/voters");
+const {
+  createNewUser,
+  listAllUsers,
+  updateVoterApprovalStatus,
+  voterLogin
+} = require("../handler/voters");
 const { validateSchema, validateToken } = require("../utils");
-const { addNewUserRequest, getUserListRequest, loginVoter, approveVoterRequest } = require("../schema/voters");
+const {
+  addNewUserRequest,
+  getUserListRequest,
+  loginVoter,
+  approveVoterRequest
+} = require("../schema/voters");
 
 // async await
 const addNewUser = async (req, res, next) => {
-  const { body, headers: { authorization } } = req;
+  // const {
+  //   body,
+  //   headers: { authorization }
+  // } = req;
+  const { body } = req;
   try {
-    await validateToken(authorization);
+    // await validateToken(authorization);
     await validateSchema(req, addNewUserRequest);
     await createNewUser(body);
     res.send({ message: "voter added successfully" });
@@ -55,17 +69,19 @@ const approveOrRejectVoters = async function(req, res, next) {
   }
 };
 
-
 // login
 const login = async (req, res, next) => {
   const { body } = req;
+  console.log("Login ", __filename);
+  console.log(body);
   try {
-    await validateSchema(body, loginVoter);
+    // await validateSchema(body, loginVoter);
     const resp = await voterLogin(body);
+    console.log("response from login handler ", resp);
     res.send(200, resp);
     next();
   } catch (e) {
-    return next({ status: 500, e })
+    return next({ status: 500, e });
   }
 };
 // exporting functions

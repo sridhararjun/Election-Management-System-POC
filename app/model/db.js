@@ -61,8 +61,13 @@ db.candidates.belongsTo(db.voters, {
   targetKey: "id"
 });
 db.candidates.belongsTo(db.party, {
-  as: "partys",
+  as: "party",
   foreignKey: "party_id",
+  targetKey: "id"
+});
+db.electionDay.belongsTo(db.candidates, {
+  as: "candidates",
+  foreignKey: "candidate_id",
   targetKey: "id"
 });
 

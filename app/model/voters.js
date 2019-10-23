@@ -1,3 +1,4 @@
+const bCrypt = require("bcrypt");
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     "voters",
@@ -79,6 +80,18 @@ module.exports = (sequelize, DataTypes) => {
       deletedAt: "deleted_at",
       engine: "InnoDB",
       charset: "utf8"
+    },
+    {
+      hooks: {
+        beforeCreate: (voters, options) => {
+          {
+            voters.password =
+              voters.password && voters.password != ""
+                ? bCrypt.hashSync(voters.password, 10)
+                : "";
+          }
+        }
+      }
     }
   );
 };

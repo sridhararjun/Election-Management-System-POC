@@ -2,7 +2,8 @@ const {
   createNewUser,
   listAllUsers,
   updateVoterApprovalStatus,
-  voterLogin
+  voterLogin,
+  list_All_Roles
 } = require("../handler/voters");
 const { validateSchema, validateToken } = require("../utils");
 const {
@@ -84,9 +85,17 @@ const login = async (req, res, next) => {
     return next({ status: 500, e });
   }
 };
+
+const getRolesList = async (req, res, next) => {
+  const roleList = await list_All_Roles();
+  res.send(roleList);
+  console.log(roleList);
+};
+
 // exporting functions
 
 module.exports.addNewUser = addNewUser;
 module.exports.listUsers = listUsers;
 module.exports.login = login;
 module.exports.approveOrRejectVoters = approveOrRejectVoters;
+module.exports.getRolesList = getRolesList;

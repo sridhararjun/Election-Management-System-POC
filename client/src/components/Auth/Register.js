@@ -57,17 +57,19 @@ class Register extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
-      .then(function(response) {
-        if (response.status >= 400) {
-          throw new Error("Bad Response From Server");
-        }
-        if (response.status === 200) {
-          this.setState({
-            message:
-              "Thanks for Registering!!! Kindly revisit in sometime to check your status"
-          });
-        }
-      }.bind(this))
+      .then(
+        function(response) {
+          if (response.status >= 400) {
+            throw new Error("Bad Response From Server");
+          }
+          if (response.status === 200) {
+            this.setState({
+              message:
+                "Thanks for Registering!!! Kindly revisit in sometime to check your status"
+            });
+          }
+        }.bind(this)
+      )
       .then(function(data) {
         console.log(data + "Data Success");
         if (data === "success") {
@@ -83,14 +85,22 @@ class Register extends Component {
   }
 
   onChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    console.log(event.target.id, "-", event.target.value);
+    if (event.target.id == "roles" || event.target.id == "constituency") {
+      this.setState({ [event.target.id]: event.target.value });
+    } else {
+      this.setState({
+        [event.target.id]: event.target.value
+      });
+    }
   }
   render() {
     // const { voting_status } = this.state;
-    let roles = this.state.roles;
-    // let roleOptions = roles.map(role => <option key={role}>{role}</option>);
+    let roleValues = this.state.roles;
+    console.log(roleValues, "roleValues");
+    let roleOptions = roleValues.map(role => (
+      <option key={role}>{role}</option>
+    ));
     return (
       <div className="container">
         <h1>{this.state.message}</h1>
@@ -128,12 +138,13 @@ class Register extends Component {
                 <label htmlFor="name">Name</label>
               </div>
               <div className="input-field col s9">
-                {/* <select value={this.state.roles}>
-                  <option value="voter">Voter</option>
-                  <option defaultValue="candidate">Candidate</option>
-                </select> */}
-                <input onChange={this.onChange} id="roles" type="text" />
-                <label htmlFor="roles">Roles</label>
+                <select
+                  className="browser-default"
+                  onChange={this.onChange}
+                  id="roles"
+                >
+                  {roleOptions}
+                </select>
               </div>
               <div className="input-field col s9">
                 {/* <select>{roleOptions}</select>

@@ -8,7 +8,8 @@ const {
   addNewUser,
   getAllUsers,
   findUser,
-  updateVoter
+  updateVoter,
+  getRoles
 } = require("../datastore/voters.js");
 
 const validatePassword = (reqPassword, userPassword) => {
@@ -68,4 +69,12 @@ exports.voterLogin = async reqBody => {
   }
 };
 
-exports.list_All_Roles = async function(req, res) {};
+exports.list_All_Roles = async (req, res) => {
+  try {
+    const rolesList = await getRoles();
+    return rolesList;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};

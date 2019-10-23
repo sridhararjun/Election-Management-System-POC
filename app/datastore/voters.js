@@ -1,4 +1,4 @@
-const { voters } = require("../model/db");
+const { voters, role } = require("../model/db");
 const { getRegexQuery } = require("../utils");
 
 const addNewUser = async reqBody => {
@@ -30,10 +30,10 @@ const getAllUsers = async options => {
 const findUser = async id => {
   return voters.findOne({
     where: {
-      id,
+      id
     },
-    attributes: ['password']
-  })
+    attributes: ["password"]
+  });
 };
 
 const updateVoter = async (reqBody, response) => {
@@ -46,7 +46,12 @@ const updateVoter = async (reqBody, response) => {
   //   console.log(result, "-----------------");
   // });
 };
+
+const getRoles = async () => {
+  return role.findAll();
+};
 module.exports.addNewUser = addNewUser;
 module.exports.getAllUsers = getAllUsers;
 module.exports.findUser = findUser;
 module.exports.updateVoter = updateVoter;
+module.exports.getRoles = getRoles;

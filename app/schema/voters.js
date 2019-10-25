@@ -24,7 +24,7 @@ module.exports.getUserListRequest = {
 };
 
 module.exports.loginVoter = {
-  voterId: joi.string().required(),
+  voterId: joi.number().required(),
   password: joi.string().required()
 };
 

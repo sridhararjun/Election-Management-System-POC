@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+let initialRoles = [];
+let initialConstituencies = [];
+let roleListLegacy;
+let constituencyListLegacy;
 class Register extends Component {
   constructor() {
     super();
     this.state = {
       id: "",
       name: "",
-      roles: [],
-      constituency: [],
+      roles: null,
+      constituency: null,
       address: "",
-      voting_status: null,
+      password: "",
       message: ""
     };
     this.onChange = this.onChange.bind(this);
@@ -18,76 +21,88 @@ class Register extends Component {
   }
 
   componentWillMount() {
-    let initialRoles = [];
-    let initialConstituencies = [];
     fetch("/roles")
       .then(function(response) {
-        console.log(response);
         return response.json();
       })
       .then(
         function(data) {
-          // console.log("Data -" + data);
-          initialRoles = data;
-          console.log(initialRoles);
+          roleListLegacy = data;
           for (let i = 0; i < data.length; i++) {
             initialRoles[i] = data[i].role_name;
           }
           this.setState({
             roles: initialRoles
           });
-          console.log(this.state.roles + " roles");
+        }.bind(this)
+      );
+    fetch("/constituency")
+      .then(function(response) {
+        return response.json();
+      })
+      .then(
+        function(data) {
+          constituencyListLegacy = data;
+          for (let i = 0; i < data.length; i++) {
+            initialConstituencies[i] = data[i].constituency_name;
+          }
+          this.setState({
+            constituency: initialConstituencies
+          });
         }.bind(this)
       );
   }
 
   onSubmit(event) {
     event.preventDefault();
+    console.log("On Submit");
     const data = {
       id: this.state.id,
       name: this.state.name,
       roles: this.state.roles,
-      constituency: this.state.constituency,
+      constituency_id: this.state.constituency,
       address: this.state.address,
-      voting_status: this.state.voting_status
+      password: this.state.password
     };
-    console.log(data);
-    fetch("/voters/new", {
+    fetch("/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
       .then(
         function(response) {
+          console.log(response);
+          console.log(response.status);
           if (response.status >= 400) {
             throw new Error("Bad Response From Server");
           }
           if (response.status === 200) {
+            console.log(response.status);
             this.setState({
               message:
                 "Thanks for Registering!!! Kindly revisit in sometime to check your status"
             });
+            alert(this.state.message);
           }
         }.bind(this)
       )
-      .then(function(data) {
-        console.log(data + "Data Success");
-        if (data === "success") {
-          this.setState({
-            message:
-              "Thanks for Registering!!! Kindly revisit in sometime to check your status"
-          });
-        }
-      })
+      .then(function(data) {})
       .catch(function(err) {
         console.log(err);
       });
   }
 
   onChange(event) {
-    console.log(event.target.id, "-", event.target.value);
     if (event.target.id == "roles" || event.target.id == "constituency") {
-      this.setState({ [event.target.id]: event.target.value });
+      let index = event.target.selectedIndex;
+      if (event.target.id == "roles") {
+        let roleId = roleListLegacy[index].id;
+        this.setState({ roles: roleId });
+      }
+      if (event.target.id == "constituency") {
+        let constituencyId = constituencyListLegacy[index].id;
+        this.setState({ constituency: constituencyId });
+      }
     } else {
       this.setState({
         [event.target.id]: event.target.value
@@ -95,15 +110,17 @@ class Register extends Component {
     }
   }
   render() {
-    // const { voting_status } = this.state;
-    let roleValues = this.state.roles;
-    console.log(roleValues, "roleValues");
-    let roleOptions = roleValues.map(role => (
+    let roleOptions = initialRoles.map(role => (
       <option key={role}>{role}</option>
+    ));
+
+    let constituencyOptions = initialConstituencies.map(constituency => (
+      <option key={constituency}>{constituency}</option>
     ));
     return (
       <div className="container">
         <h1>{this.state.message}</h1>
+        {/* <p>{this.state.roles}</p>; */}
         {/* <p>{this.state.id}</p>
         <br />
         <p>{this.state.name}</p>
@@ -147,19 +164,22 @@ class Register extends Component {
                 </select>
               </div>
               <div className="input-field col s9">
-                {/* <select>{roleOptions}</select>
-                <select>
-                  <option>Vellore</option>
-                  <option>Chennai</option>
-                </select> */}
-                <input onChange={this.onChange} id="constituency" type="text" />
-                <label htmlFor="constituency">Constituency</label>
+                <select
+                  className="browser-default"
+                  id="constituency"
+                  onChange={this.onChange}
+                >
+                  {constituencyOptions}
+                </select>
               </div>
               <div className="input-field col s9">
                 <input onChange={this.onChange} id="address" type="text" />
                 <label htmlFor="address">Address</label>
               </div>
-
+              <div className="input-field col s9">
+                <input onChange={this.onChange} id="password" type="text" />
+                <label htmlFor="password">Password</label>
+              </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
                   style={{

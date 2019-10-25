@@ -9,23 +9,26 @@ const {
   getAllUsers,
   findUser,
   updateVoter,
-  getRoles
+  getRoles,
+  getConstituencies
 } = require("../datastore/voters.js");
 
-const validatePassword = (reqPassword, userPassword) => {
-  return bcrypt.compare(reqPassword, userPassword).then(res => {
-    if (res) {
-      return Promise.resolve();
-    }
-    throw boom.badRequest("Invalid Credentials");
+const validatePassword = (reqPassword, userPassword) =>
+  new Promise((resolve, reject) => {
+    return bcrypt.compare(reqPassword, userPassword).then(res => {
+      if (res) {
+        return resolve();
+      }
+      throw boom.badRequest("Invalid Credentials");
+    });
   });
-};
 
 exports.createNewUser = async req => {
   try {
     req.voting_status = false;
     await addNewUser(req);
   } catch (e) {
+    console.log(e);
     throw e;
   }
 };
@@ -57,13 +60,14 @@ exports.voterLogin = async reqBody => {
     console.log(__filename);
     const { voterId, password } = reqBody;
     const user = await findUser(voterId);
-    console.log(user);
     if (!user) {
       throw boom.badRequest("User Not Found");
     }
     // validate password
-    // await validatePassword(password, user.password);
-    return await generateToken(user.id);
+    await validatePassword(password, user.password);
+    const token = await generateToken(user.id);
+    console.log("token", token);
+    return token;
   } catch (e) {
     throw e;
   }
@@ -72,7 +76,18 @@ exports.voterLogin = async reqBody => {
 exports.list_All_Roles = async (req, res) => {
   try {
     const rolesList = await getRoles();
+    // console.log(rolesList, "rolesList");
     return rolesList;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
+
+exports.list_All_Constituencies = async (req, res) => {
+  try {
+    const constituencyList = await getConstituencies();
+    return constituencyList;
   } catch (e) {
     console.log(e);
     throw e;

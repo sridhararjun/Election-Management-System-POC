@@ -4,9 +4,10 @@ class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
+      voterID: "",
       password: "",
-      errors: {}
+      errors: {},
+      message: ""
     };
   }
   onChange = e => {
@@ -15,10 +16,27 @@ class Login extends Component {
   onSubmit = e => {
     e.preventDefault();
     const userData = {
-      email: this.state.email,
+      voterId: this.state.voterID,
       password: this.state.password
     };
     console.log(userData);
+    fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData)
+    })
+      .then(response => {
+        if (response.status !== 200) {
+          this.setState({ message: "Login Failed" });
+          throw new Error("Login Failed");
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
   render() {
     const { errors } = this.state;
@@ -39,17 +57,17 @@ class Login extends Component {
               </p>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
-              <div className="input-field col s12">
+              <div className="input-field col s9">
                 <input
                   onChange={this.onChange}
-                  value={this.state.email}
-                  error={errors.email}
-                  id="email"
-                  type="email"
+                  value={this.state.voterID}
+                  error={errors.voterID}
+                  id="voterID"
+                  type="text"
                 />
-                <label htmlFor="email">Email</label>
+                <label htmlFor="Voter ID">Voter ID</label>
               </div>
-              <div className="input-field col s12">
+              <div className="input-field col s9">
                 <input
                   onChange={this.onChange}
                   value={this.state.password}

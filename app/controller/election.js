@@ -60,6 +60,7 @@ const registerPartyAndSymbols = async (req, res, next) => {
   try {
     await validateSchema(body, registerPartyRequest);
     await createNewPartyAndSymbol(body);
+    res.send({ message: "Party created successfully!!!" });
   } catch (e) {
     console.log(__filename, " at ", e);
     return next({ status: 404, e });
@@ -117,6 +118,7 @@ const getElectionResult = async function(req, res, next) {
   try {
     const result = await listRegisteredVotes();
     res.send(result);
+    next();
   } catch (e) {
     console.log(e);
     throw e;

@@ -1,7 +1,11 @@
-const { voters, role } = require("../model/db");
+const { voters, role, constituency } = require("../model/db");
 const { getRegexQuery } = require("../utils");
-
+const bCrypt = require("bcrypt");
+// const Op = sequelize;
 const addNewUser = async reqBody => {
+  console.log(reqBody);
+  reqBody.password = bCrypt.hashSync(reqBody.password, bCrypt.genSaltSync(10));
+  console.log(reqBody);
   return voters.create(reqBody);
 };
 
@@ -48,10 +52,21 @@ const updateVoter = async (reqBody, response) => {
 };
 
 const getRoles = async () => {
-  return role.findAll();
+  return role.findAll({
+    where: {
+      id: {
+        $notIn: [3]
+      }
+    },
+    attributes: ["id", "role_name"]
+  });
 };
+
+const getConstituencies = async () => constituency.findAll();
+
 module.exports.addNewUser = addNewUser;
 module.exports.getAllUsers = getAllUsers;
 module.exports.findUser = findUser;
 module.exports.updateVoter = updateVoter;
 module.exports.getRoles = getRoles;
+module.exports.getConstituencies = getConstituencies;

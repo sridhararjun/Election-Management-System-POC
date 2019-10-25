@@ -36,7 +36,7 @@ exports.createNewPartyAndSymbol = async function(req, res, next) {
   console.log(req, " ", __filename);
   try {
     await addNewParty(req);
-    // next(res);
+    next();
   } catch (e) {
     console.log(e);
     throw e;

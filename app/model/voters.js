@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       voting_status: {
         field: "voting_status",
-        type: DataTypes.TINYINT(1),
+        type: DataTypes.BOOLEAN,
         default: false
       },
       address: {
@@ -48,12 +48,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       approval_status: {
         field: "approval_status",
-        type: DataTypes.TINYINT(1),
+        type: DataTypes.BOOLEAN,
         default: false
       },
       password: {
         field: "password",
-        type: DataTypes.STRING(25),
+        type: DataTypes.STRING(255),
         allowNull: false
       },
       party_id: {
@@ -80,18 +80,20 @@ module.exports = (sequelize, DataTypes) => {
       deletedAt: "deleted_at",
       engine: "InnoDB",
       charset: "utf8"
-    },
-    {
-      hooks: {
-        beforeCreate: (voters, options) => {
-          {
-            voters.password =
-              voters.password && voters.password != ""
-                ? bCrypt.hashSync(voters.password, 10)
-                : "";
-          }
-        }
-      }
     }
+    // {
+    //   hooks: {
+    //     onCreate: function(voters, options, cb) {
+    //       console.log(voters, "5555555");
+    //       {
+    //         voters.password =
+    //           voters.password && voters.password != ""
+    //             ? bCrypt.hashSync(voters.password, 10)
+    //             : "";
+    //       }
+    //       return cb(null, options);
+    //     }
+    //   }
+    // }
   );
 };

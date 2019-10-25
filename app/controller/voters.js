@@ -3,7 +3,8 @@ const {
   listAllUsers,
   updateVoterApprovalStatus,
   voterLogin,
-  list_All_Roles
+  list_All_Roles,
+  list_All_Constituencies
 } = require("../handler/voters");
 const { validateSchema, validateToken } = require("../utils");
 const {
@@ -21,7 +22,6 @@ const addNewUser = async (req, res, next) => {
   // } = req;
   const { body } = req;
   try {
-    // await validateToken(authorization);
     await validateSchema(req, addNewUserRequest);
     await createNewUser(body);
     res.send({ message: "voter added successfully" });
@@ -62,7 +62,7 @@ const approveOrRejectVoters = async function(req, res, next) {
   console.log(reqBody);
   try {
     // await validateSchema(params, approveVoterRequest);
-    // await validateSchema(params, approveVoterRequest);
+    await validateSchema(params, approveVoterRequest);
     const voterDetail = await updateVoterApprovalStatus(reqBody);
     res.send({ message: "Voter updated successfully!!!" });
   } catch (e) {
@@ -76,7 +76,7 @@ const login = async (req, res, next) => {
   console.log("Login ", __filename);
   console.log(body);
   try {
-    // await validateSchema(body, loginVoter);
+    await validateSchema(req, loginVoter);
     const resp = await voterLogin(body);
     console.log("response from login handler ", resp);
     res.send(200, resp);
@@ -92,6 +92,11 @@ const getRolesList = async (req, res, next) => {
   console.log(roleList);
 };
 
+const getConstituencyList = async (req, res, next) => {
+  const constituencyList = await list_All_Constituencies();
+  res.send(constituencyList);
+  console.log(constituencyList);
+};
 // exporting functions
 
 module.exports.addNewUser = addNewUser;
@@ -99,3 +104,4 @@ module.exports.listUsers = listUsers;
 module.exports.login = login;
 module.exports.approveOrRejectVoters = approveOrRejectVoters;
 module.exports.getRolesList = getRolesList;
+module.exports.getConstituencyList = getConstituencyList;
